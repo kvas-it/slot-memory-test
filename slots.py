@@ -4,10 +4,15 @@ import sys
 from memory_profiler import profile
 
 
+try:
+    range = xrange
+except NameError:
+    pass  # python 3
+
+
 def init(self, n):
     self.one = n
     self.two = str(n) + ' little indians'
-    self.three = [n * k for k in xrange(10)]
 
 
 class NoSlots(object):
@@ -15,13 +20,13 @@ class NoSlots(object):
 
 
 class YesSlots(object):
-    __slots__ = ('one', 'two', 'three')
+    __slots__ = ('one', 'two')
     __init__ = init
 
 
 @profile
 def test(cls):
-    return [cls(n) for n in xrange(100000)]
+    return [cls(n) for n in range(100000)]
 
 
 if __name__ == '__main__':
